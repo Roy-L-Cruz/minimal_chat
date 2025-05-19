@@ -4,15 +4,13 @@ import 'package:path/path.dart';
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
-
   DatabaseHelper._init();
-
+  
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDB('chatapp.db');
     return _database!;
   }
-
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
@@ -26,7 +24,6 @@ class DatabaseHelper {
       onCreate: _createDB,
     );
   }
-
   Future _createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE users (
@@ -35,7 +32,6 @@ class DatabaseHelper {
         password TEXT
       );
     ''');
-
     await db.execute('''
       CREATE TABLE messages (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,14 +43,12 @@ class DatabaseHelper {
         FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
       );
     ''');
-
     // Insert default user
     await db.insert('users', {
       'username': 'bot',
       'password': 'bot123',
     });
   }
-
   // Get all users except current user
   Future<List<Map<String, dynamic>>> getAllUsers(int currentUserId) async {
     final db = await database;
@@ -64,7 +58,6 @@ class DatabaseHelper {
       whereArgs: [currentUserId],
     );
   }
-
   // Get all chat partners for a user
   Future<List<Map<String, dynamic>>> getChatPartners(int userId) async {
     final db = await database;
@@ -86,7 +79,6 @@ class DatabaseHelper {
     ''', [userId, userId, userId, userId, userId, userId, userId]);
     return result;
   }
-
   // Get messages between two users
   Future<List<Map<String, dynamic>>> getMessages(int userId1, int userId2) async {
     final db = await database;
@@ -97,7 +89,6 @@ class DatabaseHelper {
       orderBy: 'timestamp ASC',
     );
   }
-
   // Delete all messages between two users
   Future<void> deleteChat(int userId1, int userId2) async {
     final db = await database;
