@@ -4,19 +4,19 @@ A modern, lightweight chat application built with Flutter that supports user aut
 
 ## Features
 
-- 🔐 User Authentication
+- User Authentication
   - Login/Register functionality
   - Secure password storage
   - Session management
 
-- 💬 Chat Features
+- Chat Features
   - Real-time messaging
   - Chat history
   - User-to-user conversations
   - Message deletion
   - Modern UI with message bubbles
 
-- 👑 Admin Panel
+- Admin Panel
   - User management
   - Message management
   - Admin privileges
@@ -38,12 +38,10 @@ A modern, lightweight chat application built with Flutter that supports user aut
 git clone https://github.com/yourusername/minimal_chat.git
 cd minimal_chat
 ```
-
 2. Install dependencies:
 ```bash
 flutter pub get
 ```
-
 3. Run the app:
 ```bash
 flutter run
