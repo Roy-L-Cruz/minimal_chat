@@ -7,9 +7,7 @@ import 'login_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   final int partnerId;
-
   const ChatScreen({super.key, required this.partnerId});
-
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
