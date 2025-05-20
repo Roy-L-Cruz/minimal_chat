@@ -23,20 +23,20 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
   }
 
   Future<void> _loadChatPartners() async {
-    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+    final userId = Provider.of<AuthProvider>(context, listen: false).currentUserId;
     if (userId == null) return;
 
-    final results = await DatabaseHelper.instance.getChatPartners(userId);
+    final results = await DatabaseHelper().getChatPartners(userId);
     setState(() {
       _chatPartners = results.map((map) => ChatPartner.fromMap(map)).toList();
     });
   }
 
   Future<void> _deleteChat(ChatPartner partner) async {
-    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+    final userId = Provider.of<AuthProvider>(context, listen: false).currentUserId;
     if (userId == null) return;
 
-    await DatabaseHelper.instance.deleteChat(userId, partner.id);
+    await DatabaseHelper().deleteChat(userId, partner.id);
     await _loadChatPartners();
   }
 

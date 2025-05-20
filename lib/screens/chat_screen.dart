@@ -35,7 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _loadPartnerUsername() async {
-    final db = await DatabaseHelper.instance.database;
+    final db = await DatabaseHelper().database;
     final result = await db.query(
       'users',
       columns: ['username'],
@@ -50,10 +50,10 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _loadMessages() async {
-    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+    final userId = Provider.of<AuthProvider>(context, listen: false).currentUserId;
     if (userId == null) return;
 
-    final results = await DatabaseHelper.instance.getMessages(
+    final results = await DatabaseHelper().getMessages(
       userId,
       widget.partnerId,
     );
@@ -74,10 +74,10 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> _sendMessage() async {
     if (_messageController.text.isEmpty) return;
 
-    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+    final userId = Provider.of<AuthProvider>(context, listen: false).currentUserId;
     if (userId == null) return;
 
-    final db = await DatabaseHelper.instance.database;
+    final db = await DatabaseHelper().database;
     final now = DateTime.now().toIso8601String();
 
     await db.insert('messages', {
@@ -133,7 +133,7 @@ class _ChatScreenState extends State<ChatScreen> {
               itemBuilder: (context, index) {
                 final message = _messages[index];
                 final isMe = message.senderId ==
-                    Provider.of<AuthProvider>(context, listen: false).userId;
+                    Provider.of<AuthProvider>(context, listen: false).currentUserId;
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),

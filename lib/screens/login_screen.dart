@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../db/database_helper.dart';
 import 'register_screen.dart';
 import 'chat_screen.dart';
+import 'admin_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,7 +34,17 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (success && mounted) {
-        Navigator.of(context).pushReplacementNamed('/chats');
+        // Check if user is admin
+        final isAdmin = await DatabaseHelper().isUserAdmin(authProvider.currentUserId!);
+        if (isAdmin) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (_) => AdminScreen(userId: authProvider.currentUserId!),
+            ),
+          );
+        } else {
+          Navigator.of(context).pushReplacementNamed('/chats');
+        }
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Invalid username or password')),

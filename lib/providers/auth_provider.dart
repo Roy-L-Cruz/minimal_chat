@@ -1,12 +1,15 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import '../db/database_helper.dart';
 
 class AuthProvider with ChangeNotifier {
-  int? _userId;
-  int? get userId => _userId;
+  int? _currentUserId;
+  String? _currentUsername;
+
+  int? get currentUserId => _currentUserId;
+  String? get currentUsername => _currentUsername;
 
   Future<bool> login(String username, String password) async {
-    final db = await DatabaseHelper.instance.database;
+    final db = await DatabaseHelper().database;
     final result = await db.query(
       'users',
       where: 'username = ? AND password = ?',
@@ -14,7 +17,8 @@ class AuthProvider with ChangeNotifier {
     );
 
     if (result.isNotEmpty) {
-      _userId = result.first['id'] as int;
+      _currentUserId = result.first['id'] as int;
+      _currentUsername = result.first['username'] as String;
       notifyListeners();
       return true;
     }
@@ -23,7 +27,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<bool> register(String username, String password) async {
     try {
-      final db = await DatabaseHelper.instance.database;
+      final db = await DatabaseHelper().database;
       await db.insert('users', {'username': username, 'password': password});
       return true;
     } catch (_) {
@@ -32,7 +36,8 @@ class AuthProvider with ChangeNotifier {
   }
 
   void logout() {
-    _userId = null;
+    _currentUserId = null;
+    _currentUsername = null;
     notifyListeners();
   }
 } 

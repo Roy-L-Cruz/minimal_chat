@@ -21,10 +21,10 @@ class _NewChatScreenState extends State<NewChatScreen> {
   }
 
   Future<void> _loadUsers() async {
-    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+    final userId = Provider.of<AuthProvider>(context, listen: false).currentUserId;
     if (userId == null) return;
 
-    final users = await DatabaseHelper.instance.getAllUsers(userId);
+    final users = await DatabaseHelper().getAllUsers(userId);
     setState(() {
       _users = users;
     });
